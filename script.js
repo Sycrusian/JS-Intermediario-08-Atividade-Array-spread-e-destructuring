@@ -92,29 +92,38 @@ const enderecos = Object.freeze([
 
 //Adicionar endereços aos usuarios pelo id
 
-function addAddresToUser() {
-  // Sua lógica
+function addAddresToUser(usuarios, enderecos) {
+  usuarios.forEach(usuario => usuario.endereco = enderecos.find(endereco => endereco.userId === usuario.id));
 }
 
 //funcao para deletar o password
 
-function deletePassword() {
-  // Sua lógica
+function deletePassword(usuario) {
+  delete usuario.password;
 }
 
 //listar os usuarios sem a senha
 
-function listUsers() {
-  // Sua lógica
+function listUsers(usuarios, enderecos) {
+  const copiaUsuarios = [...usuarios];
+  addAddresToUser(copiaUsuarios, enderecos);
+  copiaUsuarios.forEach(usuario => deletePassword(usuario));
+  return copiaUsuarios;
 }
 
 //listar somente nome, email e stack
-function listUserStacks() {
-  // Sua lógica
+function listUserStacks(usuarios) {
+  return usuarios.map(usuario => {
+    const { email, nome, stacks } = usuario;
+    return { email, nome, stacks };
+  })
 }
 
 //deletar um usuário que tenha python na stack
 
-function deleteUser() {
-  // Sua lógica
+function deleteUser(usuarios, enderecos) {
+  const filtradoUsuarios = usuarios.filter(usuario => !usuario.stacks.includes("Python"));
+  addAddresToUser(filtradoUsuarios, enderecos);
+  filtradoUsuarios.forEach(usuario => deletePassword(usuario));
+  return filtradoUsuarios;
 }
